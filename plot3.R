@@ -1,7 +1,7 @@
 ## This function has 1 major branch.  Parameter is sent - to use saved transformed data or get fresh data
 ## from the internet source.  Defaults to "N"
 ## If the parameter is N - get the file from the internet, unzip, and transform the file.  Temporary file is saved
-main2 <- function(useSaveData = "N"){
+main3 <- function(useSaveData = "N"){
         
         if(useSaveData != "Y"){
                 
@@ -25,7 +25,7 @@ main2 <- function(useSaveData = "N"){
         }
         
         ##This function creates a .png file with a specific resolution and filename "plot1.png" in the working directory
-        plot2()
+        plot3()
         
         ##returning the transformed data.frame - in case futher manipulation is required
         tdata
@@ -33,17 +33,20 @@ main2 <- function(useSaveData = "N"){
 }
 
 ## This function plots the first histogram
-plot2 <- function(){
+plot3 <- function(){
         
         ## if the plot has been run before, delete it and re-run it
-        if(file.exists("plot1.png")) {file.remove("plot2.png")}
+        if(file.exists("plot3.png")) {file.remove("plot3.png")}
         
         ## png device setup - filename, resolution, and resolution uom appear to be the only parameters required
         ## to produce the desired output
-        png(filename = "plot2.png", width = 480, height = 480, units = "px")
+        png(filename = "plot3.png", width = 480, height = 480, units = "px")
         
-        plot(tdata$Time,tdata$Global_active_power, type = "n", xlab = "", ylab = "Global Active Power (kilowats)")
-        lines(tdata$Time, tdata$Global_active_power)
+        plot(tdata$Time, tdata$Sub_metering_1, type = "n", xlab = "", ylab = "Energy sub metering")
+        lines(tdata$Time, tdata$Sub_metering_2, col = "red")
+        lines(tdata$Time, tdata$Sub_metering_1, col = "black")
+        lines(tdata$Time, tdata$Sub_metering_3, col = "blue")
+        legend("topright", c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), lty=c(1,1), lwd=c(2,2), col=c("black", "red", "blue"))
         
         ## Save the file - all hist functions complete
         dev.off()
