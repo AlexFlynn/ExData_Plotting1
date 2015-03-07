@@ -1,7 +1,7 @@
 ## This function has 1 major branch.  Parameter is sent - to use saved transformed data or get fresh data
 ## from the internet source.  Defaults to "N"
 ## If the parameter is N - get the file from the internet, unzip, and transform the file.  Temporary file is saved
-main2 <- function(useSaveData = "N"){
+main4 <- function(useSaveData = "N"){
         
         if(useSaveData != "Y"){
                 
@@ -24,29 +24,59 @@ main2 <- function(useSaveData = "N"){
                 tdata$Time <- strptime(x, "%Y-%m-%d %H:%M:%S")
         }
         
-        ##This function creates a .png file with a specific resolution and filename "plot1.png" in the working directory
+        ## if the plot has been run before, delete it and re-run it
+        if(file.exists("plot4.png")) {file.remove("plot4.png")}
+        
+        ## png device setup - filename, resolution, and resolution uom appear to be the only parameters required
+        ## to produce the desired output
+        png(filename = "plot4.png", width = 480, height = 480, units = "px")        
+        
+        par(mfrow=c(2,2))
+        plot1()
         plot2()
+        plot3()
+        plot4()
+        
+        ## Save the file - all hist functions complete
+        dev.off()
         
         ##returning the transformed data.frame - in case futher manipulation is required
         tdata
         
 }
 
+## This function plots the first histogram
+plot1 <- function(){
+        
+        plot(tdata$Time,tdata$Global_active_power, type = "n", xlab = "", ylab = "Global Active Power")
+        lines(tdata$Time, tdata$Global_active_power)
+        
+}
+
 ## This function plots the second chart
 plot2 <- function(){
         
-        ## if the plot has been run before, delete it and re-run it
-        if(file.exists("plot1.png")) {file.remove("plot2.png")}
+        plot(tdata$Time,tdata$Voltage, type = "n", xlab = "datetime", ylab = "Voltage")
+        lines(tdata$Time, tdata$Voltage)
+
+}
+
+## This function plots the third chart
+plot3 <- function(){
         
-        ## png device setup - filename, resolution, and resolution uom appear to be the only parameters required
-        ## to produce the desired output
-        png(filename = "plot2.png", width = 480, height = 480, units = "px")
+        plot(tdata$Time, tdata$Sub_metering_1, type = "n", xlab = "", ylab = "Energy sub metering")
+        lines(tdata$Time, tdata$Sub_metering_2, col = "red")
+        lines(tdata$Time, tdata$Sub_metering_1, col = "black")
+        lines(tdata$Time, tdata$Sub_metering_3, col = "blue")
+        legend("topright", c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), lty=c(1,1), col=c("black", "red", "blue"), cex=.55)
+                
+}
+
+## This function plots the fourth chart
+plot4 <- function(){
         
-        plot(tdata$Time,tdata$Global_active_power, type = "n", xlab = "", ylab = "Global Active Power (kilowats)")
-        lines(tdata$Time, tdata$Global_active_power)
-        
-        ## Save the file - all hist functions complete
-        dev.off()
+        plot(tdata$Time, tdata$Global_reactive_power, type="n", xlab="datetime", ylab="Global_reactive_power")
+        lines(tdata$Time, tdata$Global_reactive_power)
         
 }
 

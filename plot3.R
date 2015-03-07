@@ -32,7 +32,7 @@ main3 <- function(useSaveData = "N"){
         
 }
 
-## This function plots the first histogram
+## This function plots the third plot
 plot3 <- function(){
         
         ## if the plot has been run before, delete it and re-run it
